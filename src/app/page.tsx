@@ -4,7 +4,7 @@ import { Input} from "@/components/ui/input";
 export default function Home() {
   return (
     <div className="">
-      <input />
+      <Input />
 
       <Button size="sm">
         Primary
