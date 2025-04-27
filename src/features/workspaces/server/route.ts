@@ -23,7 +23,7 @@ const app = new Hono()
         return c.json({ data: { documents: [], total: 0 } })
         }
     
-    const workspaceIds = members.documents.map((member) => member.workspaceid);
+    const workspaceIds = members.documents.map((member) => member.workspaceId);
 
     const workspaces = await databases.listDocuments(
         DATABASE_ID,
@@ -85,7 +85,7 @@ const app = new Hono()
             ID.unique(),
             {
                 userid: user.$id,
-                workspaceid: workspace.$id, 
+                workspaceId: workspace.$id, 
                 role: MemberRole.ADMIN,
             },
         );
