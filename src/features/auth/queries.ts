@@ -1,4 +1,3 @@
-
 import { createSessionClient } from "@/lib/appwrite";
 
  export const getCurrent = async () => {
@@ -6,7 +5,6 @@ import { createSessionClient } from "@/lib/appwrite";
     try{
        const { account} = await createSessionClient();
     
-
         return await account.get();
     } catch {
         return null;

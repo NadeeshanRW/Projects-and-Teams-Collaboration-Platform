@@ -54,10 +54,9 @@ const form = useForm<z.infer<typeof formSchema>>({
         
 
         mutate({ form: finalValues },{
-            onSuccess: () => {
+            onSuccess: ({ data }) => {
                 form.reset();
-                
-                // rederect project creen
+                router.push(`/workspaces/${workspaceId}/projects/${data.$id}`);
             }     
         });
     };

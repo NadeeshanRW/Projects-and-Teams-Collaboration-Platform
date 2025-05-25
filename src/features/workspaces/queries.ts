@@ -9,7 +9,7 @@ import { createSessionClient } from "@/lib/appwrite";
 
  export const getWorkspaces = async () => {
 
-    try{
+   
         const { databases , account} =  await createSessionClient();
             const user = await account.get();
 
@@ -34,10 +34,7 @@ import { createSessionClient } from "@/lib/appwrite";
              ],  
             );
 
-            return workspaces;
-    } catch {
-        return  { documents: [], total: 0 } ;
-    }      
+            return workspaces;     
  };
 
 interface GetWorkspacesProps{
@@ -45,7 +42,7 @@ interface GetWorkspacesProps{
 };
 
 export const getWorkspace = async ({ workspaceId }: GetWorkspacesProps) => {
-   try {
+   
     const { databases, account } = await createSessionClient();
 
      const user = await account.get();
@@ -57,8 +54,7 @@ export const getWorkspace = async ({ workspaceId }: GetWorkspacesProps) => {
      });
  
      if (!member) {
-       console.log(" Not a member of this workspace");
-       return null;
+       throw new Error("Unauthorized");
      }
  
      const workspace = await databases.getDocument<workspace>(
@@ -68,10 +64,7 @@ export const getWorkspace = async ({ workspaceId }: GetWorkspacesProps) => {
      );
  
      return workspace;
-   } catch (err) {
-     console.log("Error in getWorkspace:", err);
-     return null;
-   }
+   
  };
 
  interface GetWorkspacesInfoProps{
@@ -79,7 +72,7 @@ export const getWorkspace = async ({ workspaceId }: GetWorkspacesProps) => {
 };
 
 export const getWorkspaceInfo = async ({ workspaceId }: GetWorkspacesInfoProps) => {
-   try {
+ 
     const { databases } = await createSessionClient();
 
     const workspace = await databases.getDocument<workspace>(
@@ -91,8 +84,4 @@ export const getWorkspaceInfo = async ({ workspaceId }: GetWorkspacesInfoProps) 
      return {
       name: workspace.name,
      };
-   } catch (err) {
-     console.log("Error in getWorkspace:", err);
-     return null;
-   }
  };
