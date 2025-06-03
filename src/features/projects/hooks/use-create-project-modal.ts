@@ -14,6 +14,5 @@ export const useCreateProjectModal = () => {
         open,
         close,
         setIsOpen,
-
     };
 };
