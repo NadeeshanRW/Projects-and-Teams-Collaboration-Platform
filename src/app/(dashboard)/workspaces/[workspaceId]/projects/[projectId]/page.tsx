@@ -46,7 +46,7 @@ if (!initialValues) {
             </Button>
         </div>
        </div>
-       <TaskViewSwitcher/>
+       <TaskViewSwitcher hideProjectFilter/>
         </div>
     );
 };
