@@ -82,10 +82,7 @@ import { useDeleteProject } from "../api/use-delete-project";
         mutate({ 
             form: finalValues,
             param: { projectId: initialValues.$id }
-         },{
-            onSuccess: () => {
-                form.reset();  
-            },     
+         
         });
     };
 

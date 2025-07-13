@@ -100,10 +100,7 @@ import { useResetInviteCode } from "../api/use-reset-invite-code";
         mutate({ 
             form: finalValues,
             param: { workspaceId: initialValues.$id }
-         },{
-            onSuccess: () => {
-                form.reset();  
-            },     
+    
         });
     };
 
