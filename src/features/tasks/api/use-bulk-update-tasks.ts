@@ -1,42 +1,38 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { InferRequestType, InferResponseType } from "hono";
-import { client } from "@/lib/rpc";
 import { toast } from "sonner";
+import { InferRequestType, InferResponseType } from "hono";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { client } from "@/lib/rpc";
 
 type ResponseType = InferResponseType<typeof client.api.tasks["bulk-update"]["$post"], 200>;
 type RequestType = InferRequestType<typeof client.api.tasks["bulk-update"]["$post"]>;
 
-export const useBulkUpadateTasks = () => {
- 
-    const queryClient = useQueryClient();
-   
+export const useBulkUpdateTasks = () => {
+  const queryClient = useQueryClient();
 
-    const mutation = useMutation<
+  const mutation = useMutation<
     ResponseType,
     Error,
     RequestType
-    >({
-        mutationFn: async ({ json }) => {
-            const response = await client.api.tasks["bulk-update"]["$post"]({ json });
+  >({
+    mutationFn: async ({ json }) => {
+      const response = await client.api.tasks["bulk-update"]["$post"]({ json });
 
-            if (!response.ok) {
-                throw new Error("Failed to update Tasks");
-            }
-            return await response.json();
-        },
-        onSuccess: () => {
-            toast.success("Tasks update successfully");
-            
-            
-           
-            queryClient.invalidateQueries ({ queryKey: ["tasks"]});
-           
-        },
-        onError: () => {
-            toast.error("Failed to update Tasks");
-        }
-        });
+      if (!response.ok) {
+        throw new Error("Failed to updated tasks");
+      }
 
-        return mutation;
-    };
+      return await response.json();
+    },
+    onSuccess: () => {
+      toast.success("Tasks updated");
+
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: () => {
+      toast.error("Failed to update tasks");
+    }
+  });
+
+  return mutation;
+};

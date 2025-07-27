@@ -1,88 +1,84 @@
-import { z } from "zod";
 import { Hono } from "hono";
-import { deleteCookie, setCookie } from "hono/cookie";
-import { zValidator } from "@hono/zod-validator"
-import { loginSchema , registerSchema} from "../schemas";
-import { createAdminClient } from "@/lib/appwrite";
 import { ID } from "node-appwrite";
-import { AUTH_COOKIE } from "../constants";
+import { deleteCookie, setCookie } from "hono/cookie";
+import { zValidator } from "@hono/zod-validator";
+
+import { createAdminClient } from "@/lib/appwrite";
 import { sessionMiddleware } from "@/lib/session-middleware";
 
+import { AUTH_COOKIE } from "../constants";
+import { loginSchema, registerSchema } from "../schemas";
+
 const app = new Hono()
-    .get(
-        "/current",
-         sessionMiddleware,
-        (c) => {
-        const user = c.get("user");
-        
-        return c.json({ data: user });
-        }
-    )
+  .get(
+    "/current",
+    sessionMiddleware,
+    (c) => {
+      const user = c.get("user");
 
-    .post(
-        "/login", 
-        zValidator("json", loginSchema) , 
-    async (c) => {
-        const { email, password, } = c.req.valid("json");
-       
-       const { Account } = await createAdminClient();
-        const session = await Account.createEmailPasswordSession(
-            email,
-            password,
-        );
-
-        setCookie(c, AUTH_COOKIE, session.secret,{
-            path: "/",
-            httpOnly: true,
-            secure: true,
-            sameSite: "strict",
-            maxAge: 60 * 60 * 24 * 30,
-        });
-
-        return c.json({ success: true });
+      return c.json({ data: user });
     }
-)
+  )
+  .post(
+    "/login",
+    zValidator("json", loginSchema),
+    async (c) => {
+      const { email, password } = c.req.valid("json");
 
-    .post(
-        "/register",
-        zValidator("json", registerSchema) ,
-        async (c) => {
-            const { name, email, password, } = c.req.valid("json");
-           
-            const { Account } = await createAdminClient();
-            await Account.create(
-                ID.unique(),
-                email,
-                password,
-                name,
-            );
+      const { account } = await createAdminClient();
+      const session = await account.createEmailPasswordSession(
+        email,
+        password,
+      );
 
-            const session = await Account.createEmailPasswordSession(
-                email,
-                password,
-            );
+      setCookie(c, AUTH_COOKIE, session.secret, {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 30,
+      });
 
-            setCookie(c, AUTH_COOKIE, session.secret,{
-                path: "/",
-                httpOnly: true,
-                secure: true,
-                sameSite: "strict",
-                maxAge: 60 * 60 * 24 * 30,
-            });
+      return c.json({ success: true });
+    }
+  )
+  .post(
+    "/register",
+    zValidator("json", registerSchema),
+    async (c) => {
+      const { name, email, password } = c.req.valid("json");
 
-            return c.json({ success: true });
-        }
-    )
+      const { account } = await createAdminClient();
+      await account.create(
+        ID.unique(),
+        email,
+        password,
+        name,
+      );
 
-    .post("/logout", sessionMiddleware, async(c) => {
-        const account =c.get("account");
+      const session = await account.createEmailPasswordSession(
+        email,
+        password,
+      );
 
-        deleteCookie(c, AUTH_COOKIE);
-        await account.deleteSession("current");
-        
-        return c.json({ success: true });
+      setCookie(c, AUTH_COOKIE, session.secret, {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "strict",
+        maxAge: 60 * 60 * 24 * 30,
+      });
 
-    });
+      return c.json({ success: true });
+    }
+  )
+  .post("/logout", sessionMiddleware, async (c) => {
+    const account = c.get("account");
 
+    deleteCookie(c, AUTH_COOKIE);
+    await account.deleteSession("current");
 
-    export default app;
+    return c.json({ success: true });
+  });
+
+export default app;

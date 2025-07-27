@@ -1,1 +1,1 @@
-export const AUTH_COOKIE = "Teams-Collaboration-Platform";
+export const AUTH_COOKIE = "cwa-jira-clone-session";
