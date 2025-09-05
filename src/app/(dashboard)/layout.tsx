@@ -1,3 +1,5 @@
+"use client";
+
 import { EditTaskModal } from "@/features/tasks/components/edit-task-modal";
 import { CreateTaskModal } from "@/features/tasks/components/create-task-modal";
 import { CreateProjectModal } from "@/features/projects/components/create-project-modal";
@@ -5,14 +7,15 @@ import { CreateWorkspaceModal } from "@/features/workspaces/components/create-wo
 
 import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
+import DashboardBackground from "./dashboard-background";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-};
+}
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
-  return ( 
-    <div className="min-h-screen">
+  return (
+    <DashboardBackground>
       <CreateWorkspaceModal />
       <CreateProjectModal />
       <CreateTaskModal />
@@ -24,14 +27,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className="lg:pl-[264px] w-full">
           <div className="mx-auto max-w-screen-2xl h-full">
             <Navbar />
-            <main className="h-full py-8 px-6 flex flex-col">
-              {children}
-            </main>
+            <main className="h-full py-8 px-6 flex flex-col">{children}</main>
           </div>
         </div>
       </div>
-    </div>
+    </DashboardBackground>
   );
 };
- 
+
 export default DashboardLayout;
+

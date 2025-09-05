@@ -21,12 +21,30 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={cn(inter.className, "antialiased min-h-screen")}
-      >
+      <head>
+        {/* Load Zapier chatbot script globally */}
+        <script
+          async
+          type="module"
+          src="https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js"
+        />
+      </head>
+      <body className={cn(inter.className, "antialiased min-h-screen")}>
         <QueryProvider>
           <Toaster />
           {children}
+
+          {/* Zapier Chatbot Embed (popup bottom-right) */}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: `
+                <zapier-interfaces-chatbot-embed
+                  is-popup="true"
+                  chatbot-id="cmezezd3p003pmonduxsfx5i2"
+                ></zapier-interfaces-chatbot-embed>
+              `,
+            }}
+          />
         </QueryProvider>
       </body>
     </html>

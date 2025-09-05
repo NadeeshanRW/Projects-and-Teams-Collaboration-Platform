@@ -1,22 +1,27 @@
 "use client";
 
+import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
+import Background from "./backgroud";
 
 interface AuthLayoutProps {
   children: React.ReactNode;
-};
+}
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   const pathname = usePathname();
   const isSignIn = pathname === "/sign-in";
 
-  return ( 
-    <main className="bg-neutral-100 min-h-screen">
-      <div className="mx-auto max-w-screen-2xl p-4">
+  return (
+    <main className="bg-neutral-100 min-h-screen relative">
+      {/* Background animation */}
+      <Background />
+
+      {/* Auth Layout Content */}
+      <div className="relative z-10 mx-auto max-w-screen-2xl p-4">
         <nav className="flex justify-between items-center">
           <Image src="/logo.png" alt="logo" width={152} height={56} />
           <Button asChild variant="secondary">
@@ -25,12 +30,12 @@ const AuthLayout = ({ children }: AuthLayoutProps) => {
             </Link>
           </Button>
         </nav>
-        <div className="flex flex-col items-center justify-center pt-4 md:pt-14">
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-120px)]">
           {children}
         </div>
       </div>
     </main>
-   );
-}
- 
+  );
+};
+
 export default AuthLayout;
